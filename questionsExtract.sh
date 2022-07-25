@@ -4,7 +4,12 @@
 
     # find all directories with name _bare and then loop through the list
 
-    JS_SCRIPT=$(realpath -- ./build/index.js)
+    RESULT_DIR=/usr/result
+
+    JS_SCRIPT=$(realpath -- ${RESULT_DIR}/index.js)
+
+    [ $? -ne 0 ] && echo "index.js file missing at ${RESULT_DIR}/index.js" && return 1
+
 
     TEMP_BRANCH_QUESTION_ARRAY=()
 
@@ -41,10 +46,13 @@
 
     cd $CUR_DIRECTORY
 
-    cd result
-    echo "current dir $(pwd)"
+    (
+        cd $RESULT_DIR
 
-    (IFS=$'\n'; echo "${TEMP_BRANCH_QUESTION_ARRAY[*]}" > questionIdsResult.txt)
+        echo "current dir $(pwd)"
+
+        IFS=$'\n'; echo "${TEMP_BRANCH_QUESTION_ARRAY[*]}" > questionIdsResult.txt
+    )
 
     #   node -e 'console.log(process.argv[1])' "$(git show master:-yaZpTokd.json)"
 
