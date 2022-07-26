@@ -4,12 +4,21 @@
 
     # find all directories with name _bare and then loop through the list
 
-    RESULT_DIR=/usr/result
+    read -p "enter result directory: " result_dir
 
-    JS_SCRIPT=$(realpath -- ${RESULT_DIR}/index.js)
+    if [ -d $(realpath -- $result_dir) ]; then
+        echo "result file will be saved to: $result_dir"
+        RESULT_DIR=$result_dir
+        else
+            echo "directory does not exist. Please create a result directory and run again"
+            return 1
+    fi
 
-    [ $? -ne 0 ] && echo "index.js file missing at ${RESULT_DIR}/index.js" && return 1
+    echo "result directory set to $(realpath -- $RESULT_DIR)"
 
+    JS_SCRIPT=$(realpath -- ${RESULT_DIR}/index.js 2>/dev/null)
+
+    [ $? -ne 0 ] || [ ! -f $JS_SCRIPT ] && echo "index.js file missing at ${RESULT_DIR}/index.js. Add your index.js file here" && return 1
 
     TEMP_BRANCH_QUESTION_ARRAY=()
 
