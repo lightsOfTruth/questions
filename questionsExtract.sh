@@ -5,8 +5,9 @@
     # find all directories with name _bare and then loop through the list
 
     read -p "enter result directory: " result_dir
+    result_dir=$(realpath -- $result_dir 2>/dev/null)
 
-    if [ -d $(realpath -- $result_dir) ]; then
+    if [ $? -eq 0 ] && [ -d $result_dir ]; then
         echo "result file will be saved to: $result_dir"
         RESULT_DIR=$result_dir
         else
